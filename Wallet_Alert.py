@@ -1,87 +1,74 @@
-
-
 ###Python Script to automaticly alert Wallet changes###
 
+import requests
+from bs4 import BeautifulSoup
+import difflib
 import time
-import hashlib
-from urllib.request import urlopen, Request
+from datetime import datetime
 from plyer import notification
-import pandas as pd
 
 
-def checkWallet(wallet):
+def check_wallet(wallet):
+    # target URL
+    url = f"https://www.blockchain.com/btc/address/{wallet}"
+    # act like a browser
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 '
+                      '(KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
 
-    url = Request(f"https://www.blockchain.com/btc/address/{wallet}")
-    print("running")
-    time.sleep(5)
+    prev_version = ""
+    first_run = True
     while True:
+
+        # download the page
+        response = requests.get(url, headers=headers)
+        # parse the downloaded homepage
+        soup = BeautifulSoup(response.text, "lxml")
+
+        # remove all scripts and styles and get transaction number
+        for script in soup(["script", "style"]):
+            script.extract()
+        soup = soup.get_text()
+        transaction_amount_index = (soup.split().index("transacted") + 1)
+        transaction_amount = (soup.split()[transaction_amount_index])
+
+        # compare the page text to the previous version
         try:
-            # perform the get request and store it in a var
-            response = urlopen(url).read()
+            if prev_version != transaction_amount:
+                # on the first run - just memorize the page
+                if first_run == True:
+                    prev_version = transaction_amount
+                    first_run = False
+                    print("Start Monitoring " + url + " - " + str(datetime.now()))
+                    print("Transaction amount is " + str(transaction_amount) + "  - " + str(datetime.now()))
+                else:
+                    print("Changes detected at: " + str(datetime.now()))
+                    old_page = prev_version
+                    print("+-+-+-+-+-+-OLDPAGE IS : " + str(old_page) + " - " + str(datetime.now()))
+                    new_page = (soup.split()[transaction_amount_index])
+                    print("+-+-+-+-+-+-NEWPAGE IS : " + str(new_page) + " - " + str(datetime.now()))
 
-            # print(response)
+                    # compare versions and highlight changes using difflib
+                    # d = difflib.Differ()
+                    # diff = d.compare(old_page, new_page)
 
-            # create a hash
-            currentHash = hashlib.sha224(response).hexdigest()
+                    diff = difflib.context_diff(old_page, new_page, n=20)
+                    out_text = "\n".join([ll.rstrip() for ll in '\n'.join(diff).splitlines() if ll.strip()])
+                    print(out_text)
+                    old_page = new_page
+                    # print ('\n'.join(diff))
 
-            # wait for 20 seconds
-            time.sleep(20)
-
-            # perform the get request
-            response = urlopen(url).read()
-
-            # create a new hash
-            newHash = hashlib.sha224(response).hexdigest()
-
-            # check if new hash is same as the previous hash
-            if newHash == currentHash:
-                continue
-
-            # if something changed in the hashes
+                    prev_version = transaction_amount
+                    notification.notify(
+                        title=f"{wallet} has new transaction",
+                        message=f"{url}"
+                    )
             else:
-                # notify
-                print("something changed")
-
-                # again read the website
-                response = urlopen(url).read()
-
-                # create a hash
-                currentHash = hashlib.sha224(response).hexdigest()
-
-                # wait for 30 seconds
-                time.sleep(30)
-                continue
-
-        # To handle exceptions
-        except Exception as e:
-            print("error")
-
-checkWallet("32ANbidud9ABk7AGPnRvbcKwJ6CQqJm6HE")
+                print("No Changes " + str(datetime.now()))
+            time.sleep(60)
+            continue
+        except Exception as error:
+            print("Error - " + str(error))
 
 
-
-
-#
-# if __name__ == '__main__':
-#     wallet_list = []
-#     df = pd.read_excel(r"C:\Users\GZL_010\Desktop\wallets.xlsx")
-#
-#     for col in df.columns:
-#         wallet_list.append(col)
-#         for val in df[col]:
-#             wallet_list.append(val)
-#     print(wallet_list)
-#
-#     for wallet in wallet_list:
-#         try:
-#             checkWallet(wallet)
-#         except Exception as Error:
-#             print(f"Error happened on {wallet}")
-#             try:
-#                 print("Retrying - in 5 seconds")
-#                 time.sleep(5)
-#                 checkWallet(wallet)
-#             except Exception as Error:
-#                 print("Retry Failed " + str(Error))
-#
-#             print("Couldn't complete due to " + str(Error))
+check_wallet("32ANbidud9ABk7AGPnRvbcKwJ6CQqJm6HE")
