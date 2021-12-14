@@ -12,22 +12,20 @@ import pandas as pd
 def checkWallet(wallet):
 
     url = Request(f"https://www.blockchain.com/btc/address/{wallet}")
-    response = urlopen(url).read()
-
-    currentHash = hashlib.sha224(response).hexdigest()
     print("running")
-    time.sleep(10)
+    time.sleep(5)
     while True:
         try:
             # perform the get request and store it in a var
             response = urlopen(url).read()
-            print(response)
+
+            # print(response)
 
             # create a hash
             currentHash = hashlib.sha224(response).hexdigest()
 
-            # wait for 30 seconds
-            time.sleep(30)
+            # wait for 20 seconds
+            time.sleep(20)
 
             # perform the get request
             response = urlopen(url).read()
