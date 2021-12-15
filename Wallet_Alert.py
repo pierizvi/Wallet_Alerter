@@ -61,7 +61,7 @@ def check_wallet(wallet):
                     prev_version = transaction_amount
                     notification.notify(
                         title=f"{wallet} has new transaction",
-                        message=f"{url}"
+                        message=f"{url}" + "/n" + str(datetime.now()),
                     )
             else:
                 print("No Changes " + str(datetime.now()))
@@ -71,4 +71,4 @@ def check_wallet(wallet):
             print("Error - " + str(error))
 
 
-check_wallet("32ANbidud9ABk7AGPnRvbcKwJ6CQqJm6HE")
+check_wallet("3EaxCE3jDzk8sUAcQyxMAc3ch15ynw3TJa")
