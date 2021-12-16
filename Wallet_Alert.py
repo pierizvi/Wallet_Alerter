@@ -55,14 +55,16 @@ def check_wallet(wallet):
                     diff = difflib.context_diff(old_page, new_page, n=20)
                     out_text = "\n".join([ll.rstrip() for ll in '\n'.join(diff).splitlines() if ll.strip()])
                     print(out_text)
-                    old_page = new_page
+                    # old_page = new_page
                     # print ('\n'.join(diff))
 
-                    prev_version = transaction_amount
+                    # prev_version = transaction_amount
                     notification.notify(
                         title=f"{wallet} has new transaction",
                         message=f"{url}" + "/n" + str(datetime.now()),
                     )
+                    print("Script ShutDown")
+                    break
             else:
                 print("No Changes " + str(datetime.now()))
             time.sleep(60)
