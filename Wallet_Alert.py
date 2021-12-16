@@ -53,12 +53,9 @@ def check_wallet(wallet):
                     # diff = d.compare(old_page, new_page)
 
                     diff = difflib.context_diff(old_page, new_page, n=20)
-                    out_text = "\n".join([ll.rstrip() for ll in '\n'.join(diff).splitlines() if ll.strip()])
-                    print(out_text)
-                    # old_page = new_page
-                    # print ('\n'.join(diff))
+                    print('\n'.join(diff))
 
-                    # prev_version = transaction_amount
+                    # Pop Up Notification
                     notification.notify(
                         title=f"{wallet} has new transaction",
                         message=f"{url}" + "/n" + str(datetime.now()),
