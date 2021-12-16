@@ -58,12 +58,16 @@ def check_wallet():
                     print('\n'.join(diff))
 
                     # Pop Up Notification
-                    notification.notify(
-                        title=f"{wallet} has new transaction",
-                        message=f"{url}" + "\n" + str(datetime.now()),
-                        app_icon=r"C:\dev\Wallet-Alert\bell-icon.png",
-                        timeout=120
-                    )
+                    try:
+                        notification.notify(
+                            title=f"{wallet} has new transaction",
+                            message=f"{url}" + "\n" + str(datetime.now()),
+                            app_icon=r"C:\dev\Wallet-Alert\bell-icon.png",
+                            timeout=120
+                        )
+                    except Exception as error:
+                        print("Notification Error: " + str(error))
+
                     print("Script ShutDown")
                     break
             else:
@@ -71,7 +75,8 @@ def check_wallet():
             time.sleep(60)
             continue
         except Exception as error:
-            print("Error - " + str(error))
+            print("Main Script Error - " + str(error) + " \n-----------Script Closing-----------")
+            break
 
 
 check_wallet()
