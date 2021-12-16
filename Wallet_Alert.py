@@ -1,5 +1,3 @@
-###Python Script to automaticly alert Wallet changes###
-
 import requests
 from bs4 import BeautifulSoup
 import difflib
@@ -36,7 +34,7 @@ def check_wallet(wallet):
         try:
             if prev_version != transaction_amount:
                 # on the first run - just memorize the page
-                if first_run == True:
+                if first_run:
                     prev_version = transaction_amount
                     first_run = False
                     print("Start Monitoring " + url + " - " + str(datetime.now()))
@@ -59,6 +57,8 @@ def check_wallet(wallet):
                     notification.notify(
                         title=f"{wallet} has new transaction",
                         message=f"{url}" + "/n" + str(datetime.now()),
+                        app_icon="bell-icon.png",
+                        timeout=120
                     )
                     print("Script ShutDown")
                     break
