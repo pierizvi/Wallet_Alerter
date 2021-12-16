@@ -6,9 +6,12 @@ from datetime import datetime
 from plyer import notification
 
 
-def check_wallet(wallet):
+def check_wallet():
     # target URL
+    print("Please Enter Wallet Adress:")
+    wallet = input()
     url = f"https://www.blockchain.com/btc/address/{wallet}"
+
     # act like a browser
     headers = {
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 '
@@ -37,8 +40,8 @@ def check_wallet(wallet):
                 if first_run:
                     prev_version = transaction_amount
                     first_run = False
-                    print("Start Monitoring " + url + " - " + str(datetime.now()))
-                    print("Transaction amount is " + str(transaction_amount) + "  - " + str(datetime.now()))
+                    print("+-+-+-+-+- Start Monitoring -+-+-+-+-+ \n" + url + " - " + str(datetime.now()))
+                    print("\nTransaction amount is " + str(transaction_amount) + "  - " + str(datetime.now()))
                 else:
                     print("Changes detected at: " + str(datetime.now()))
                     old_page = prev_version
@@ -70,4 +73,4 @@ def check_wallet(wallet):
             print("Error - " + str(error))
 
 
-check_wallet("3EaxCE3jDzk8sUAcQyxMAc3ch15ynw3TJa")
+check_wallet()
