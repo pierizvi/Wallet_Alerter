@@ -8,14 +8,14 @@ from plyer import notification
 
 def check_wallet():
     # target URL
-    print("Please Enter Wallet Adress:")
+    print("Please Enter Wallet Address:")
     wallet = input()
     url = f"https://www.blockchain.com/btc/address/{wallet}"
 
     # act like a browser
     headers = {
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 '
-                      '(KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
+                      '(HTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
 
     prev_version = ""
     first_run = True
@@ -41,14 +41,14 @@ def check_wallet():
                     prev_version = transaction_amount
                     first_run = False
                     print("\n+-+-+-+-+- Start Monitoring -+-+-+-+-+ \n" + url + " - " + str(datetime.now()))
-                    print("\nOriginal Transaction amount is -+-" + str(transaction_amount) + "-+-  - " + str(datetime
-                                                                                                             .now()))
+                    print("\nOriginal Transaction amount is    " + str(transaction_amount) + "    - " + str(datetime
+                                                                                                            .now()))
                 else:
                     print("Changes detected at: " + str(datetime.now()))
                     old_page = prev_version
-                    print("+-+-+-+ OLDPAGE IS : " + str(old_page) + " - " + str(datetime.now()))
+                    print("+-+-+-+ OLD-PAGE IS : " + str(old_page) + " - " + str(datetime.now()))
                     new_page = (soup.split()[transaction_amount_index])
-                    print("+-+-+-+ NEWPAGE IS : " + str(new_page) + " - " + str(datetime.now()))
+                    print("+-+-+-+ NEW-PAGE IS : " + str(new_page) + " - " + str(datetime.now()))
 
                     # compare versions and highlight changes using difflib
                     # d = difflib.Differ()
@@ -60,8 +60,8 @@ def check_wallet():
                     # Pop Up Notification
                     notification.notify(
                         title=f"{wallet} has new transaction",
-                        message=f"{url}" + "/n" + str(datetime.now()),
-                        app_icon="bell-icon.png",
+                        message=f"{url}" + "\n" + str(datetime.now()),
+                        app_icon=r"C:\dev\Wallet-Alert\bell-icon.png",
                         timeout=120
                     )
                     print("Script ShutDown")
