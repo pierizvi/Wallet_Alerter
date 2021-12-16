@@ -40,14 +40,15 @@ def check_wallet():
                 if first_run:
                     prev_version = transaction_amount
                     first_run = False
-                    print("+-+-+-+-+- Start Monitoring -+-+-+-+-+ \n" + url + " - " + str(datetime.now()))
-                    print("\nTransaction amount is " + str(transaction_amount) + "  - " + str(datetime.now()))
+                    print("\n+-+-+-+-+- Start Monitoring -+-+-+-+-+ \n" + url + " - " + str(datetime.now()))
+                    print("\nOriginal Transaction amount is -+-" + str(transaction_amount) + "-+-  - " + str(datetime
+                                                                                                             .now()))
                 else:
                     print("Changes detected at: " + str(datetime.now()))
                     old_page = prev_version
-                    print("+-+-+-+-+-+-OLDPAGE IS : " + str(old_page) + " - " + str(datetime.now()))
+                    print("+-+-+-+ OLDPAGE IS : " + str(old_page) + " - " + str(datetime.now()))
                     new_page = (soup.split()[transaction_amount_index])
-                    print("+-+-+-+-+-+-NEWPAGE IS : " + str(new_page) + " - " + str(datetime.now()))
+                    print("+-+-+-+ NEWPAGE IS : " + str(new_page) + " - " + str(datetime.now()))
 
                     # compare versions and highlight changes using difflib
                     # d = difflib.Differ()
