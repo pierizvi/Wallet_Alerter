@@ -55,7 +55,9 @@ def check_wallet():
                             title=f"{wallet} has new transaction",
                             message=f"{url}" + "\n" + str(datetime.now()),
                             app_icon=r"C:\dev\Wallet-Alert\bell-icon.png",
-                            timeout=120
+                            timeout=120,
+                            ticker=True,
+                            toast=False
                         )
                     except Exception as error:
                         print("Notification Error: " + str(error))
