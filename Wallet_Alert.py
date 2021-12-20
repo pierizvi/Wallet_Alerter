@@ -1,6 +1,5 @@
 import requests
 from bs4 import BeautifulSoup
-import difflib
 import time
 from datetime import datetime
 from plyer import notification
@@ -44,18 +43,11 @@ def check_wallet():
                     print("\nOriginal Transaction amount is    " + str(transaction_amount) + "    - " + str(datetime
                                                                                                             .now()))
                 else:
-                    print("Changes detected at: " + str(datetime.now()))
+                    print("\n" + "+-+-+-+-+-" + "Changes detected at: " + str(datetime.now()) + "+-+-+-+-+-")
                     old_page = prev_version
                     print("+-+-+-+ OLD-PAGE IS : " + str(old_page) + " - " + str(datetime.now()))
                     new_page = (soup.split()[transaction_amount_index])
                     print("+-+-+-+ NEW-PAGE IS : " + str(new_page) + " - " + str(datetime.now()))
-
-                    # compare versions and highlight changes using difflib
-                    # d = difflib.Differ()
-                    # diff = d.compare(old_page, new_page)
-
-                    diff = difflib.context_diff(old_page, new_page, n=20)
-                    print('\n'.join(diff))
 
                     # Pop Up Notification
                     try:
