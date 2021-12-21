@@ -73,4 +73,5 @@ def check_wallet():
             break
 
 
-check_wallet()
+if __name__ == '__main__':
+    check_wallet()
